@@ -1,0 +1,49 @@
+{
+  "name": "@instun/sm2-multikey",
+  "version": "1.0.0",
+  "description": "A JavaScript library for generating and working with SM2Multikey key pairs. Compatible with both Node.js and fibjs runtimes.",
+  "type": "module",
+  "main": "lib/index.js",
+  "browser": "lib/browser.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "node --test 'test/**/*.js'",
+    "test_browser": "FORCE_BROWSER_IMPL=true node --test 'test/**/*.js'"
+  },
+  "keywords": [
+    "sm2",
+    "sm3",
+    "multikey",
+    "cryptography",
+    "digital signatures",
+    "verifiable credentials",
+    "did",
+    "jwk",
+    "der",
+    "data integrity",
+    "fibjs"
+  ],
+  "author": "Instun",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "jsonld": "^8.3.2",
+    "multiformats": "^13.3.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "fibjs": ">=0.36.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/instun/sm2-multikey.git"
+  },
+  "bugs": {
+    "url": "https://github.com/instun/sm2-multikey/issues"
+  },
+  "homepage": "https://github.com/instun/sm2-multikey#readme"
+}
