@@ -98,11 +98,11 @@ describe('SM2Multikey', () => {
         it('should sign and verify message', () => {
             const key = SM2Multikey.generate();
             const message = Buffer.from('test message');
-            
+
             const { sign } = key.signer();
             const signature = sign({ data: message });
             assert(Buffer.isBuffer(signature));
-            
+
             const { verify } = key.verifier();
             const valid = verify({ data: message, signature });
             assert.strictEqual(valid, true);
@@ -112,10 +112,10 @@ describe('SM2Multikey', () => {
             const key = SM2Multikey.generate();
             const message = Buffer.from('test message');
             const wrongMessage = Buffer.from('wrong message');
-            
+
             const { sign } = key.signer();
             const signature = sign({ data: message });
-            
+
             const { verify } = key.verifier();
             const valid = verify({ data: wrongMessage, signature });
             assert.strictEqual(valid, false);
@@ -151,8 +151,15 @@ describe('SM2Multikey', () => {
                 key: {
                     '@context': 'https://w3id.org/security/multikey/v1',
                     publicKeyMultibase: 'zEPJcHCTZ5V4jR1cFb9ptYk22SRRZb56VzCLm3cQ8KtYX4Qsc',
-                    secretKeyMultibase: 'z44CBQNfTbV8xvP1NH1Qay6rT5GyhwfB2KzdKmmp39XincZb',
+                    secretKeyMultibase: 'z4G1CrmL4cxVjko4gSkeRcUSa4ufxmaSvEnebDRgqLFdf89j',
                     type: 'Multikey'
+                },
+                jwk: {
+                    kty: 'EC',
+                    crv: 'SM2',
+                    x: 'F4yXvv-AfYpmT1VN5ph8rX_qw9lB-fryHLfh6H0tgys',
+                    y: '1nc7Whh5v1JBv6zueWxE4H8yFgLIJOL1aZ0w5Pid4vc',
+                    d: 'EdUqYVq1VUsU8AS5hp_R2FIbBKI0pXOmHK1ttiabuqY'
                 },
                 message: Buffer.from('signature test'),
                 signature: Buffer.from('e9fa0b03ac51ed59e4e2997d35e3dc4c22852320d340dd6ed0e927c467a23d3b57d81e90397b77d216b5f654ca1bb98b913f4575328e254cc0278b1cebf51567', 'hex'),
@@ -162,8 +169,15 @@ describe('SM2Multikey', () => {
                 key: {
                     '@context': 'https://w3id.org/security/multikey/v1',
                     publicKeyMultibase: 'zEPJc1vCfbG2aoZn8f3U8ggYRL4ZFfF63ZA3qFSk81WJxnCQr',
-                    secretKeyMultibase: 'z44CNtuoKQFg5qNqQJfeaYXZEfbYJDpu1tq9WJon4W1JwNwD',
+                    secretKeyMultibase: 'z4G1QMJTvRj2rfntiUQtRBu9MfEEZ3kAuodAmkTergjDotXM',
                     type: 'Multikey'
+                },
+                jwk: {
+                    kty: 'EC',
+                    crv: 'SM2',
+                    x: 'NIMpjy0M25izi2DrQLhQBlL8b45Lt9a0FzfELdpdO0s',
+                    y: 'NXstrSPtSp1cZzvupZ8C68FCgSQhZbuGYLorP6F1N2w',
+                    d: 'vJUwfRiA7lDOnJEmJmCMWDvZ5EScnaieKNuqie5GnHw'
                 },
                 message: Buffer.from(''),
                 signature: Buffer.from('dc9b98def44a5352821cec5484e211fab816b1e6f0c187006d9121ad341755aa4bc264212711eed6e23afe1ef2cd455ea0460ad4f65c4dcd4a0c24326132173c', 'hex'),
@@ -173,8 +187,15 @@ describe('SM2Multikey', () => {
                 key: {
                     '@context': 'https://w3id.org/security/multikey/v1',
                     publicKeyMultibase: 'zEPJbzijVS23WTMM6XU5cAnmeeFGXffrnM34ZB263TFYFgwKf',
-                    secretKeyMultibase: 'z44CFkCr7vmCasUtutZrBeEjZLAssZse9XyYr8Gw6236WmkS',
+                    secretKeyMultibase: 'z4G1HCbWixEZMhtxE4K62HcKgKoa8Pnv3Sma7ZvotCm1PHLa',
                     type: 'Multikey'
+                },
+                jwk: {
+                    kty: 'EC',
+                    crv: 'SM2',
+                    x: 'IrdcBbrVDB71hRm-XbDbUxARW6Tz9NGnnUj_6naue6o',
+                    y: 'E0eh47bvx-CtJEl8jqeDUX51OTYsJfc0QFNCC8M0jjQ',
+                    d: 'UlhuI68hVcqcGRBKpuyrnUwLJO_AdU6sh--_tO7vmd8'
                 },
                 message: Buffer.from('测试签名'),
                 signature: Buffer.from('a18fec2c91bf04f211594659e077b0972f1bf7e4a11b46b49a4214a5fdc5bfac0aa26c3849bcdbf14c4cbcb461db85ac6ac9c549897b180206b8a24db7a57bea', 'hex'),
@@ -182,8 +203,13 @@ describe('SM2Multikey', () => {
         ];
 
         testVectors.forEach(vector => {
-            it(vector.name, async () => {
-                const key = await SM2Multikey.from(vector.key);
+            it(vector.name, () => {
+                const key = SM2Multikey.from(vector.key);
+                assert.deepEqual(SM2Multikey.toJwk({
+                    keyPair: key,
+                    secretKey: true
+                }), vector.jwk);
+
                 const { sign } = key.signer();
                 const signature = sign({ data: vector.message });
                 assert(Buffer.isBuffer(signature));
@@ -195,9 +221,9 @@ describe('SM2Multikey', () => {
             });
         });
 
-        it('should fail verification with wrong message', async () => {
+        it('should fail verification with wrong message', () => {
             const vector = testVectors[0];
-            const key = await SM2Multikey.from(vector.key);
+            const key = SM2Multikey.from(vector.key);
             const wrongMessage = Buffer.from('wrong message');
             const { verify } = key.verifier();
             const valid = verify({ data: wrongMessage, signature: vector.signature });
@@ -226,12 +252,12 @@ describe('SM2Multikey', () => {
             );
         });
 
-        it('should fail verification with modified signature', async () => {
+        it('should fail verification with modified signature', () => {
             const vector = testVectors[0];
-            const key = await SM2Multikey.from(vector.key);
+            const key = SM2Multikey.from(vector.key);
             const modifiedSignature = Buffer.from(vector.signature);
             modifiedSignature[0] ^= 1;
-            
+
             const { verify } = key.verifier();
             const valid = verify({ data: vector.message, signature: modifiedSignature });
             assert.strictEqual(valid, false);
@@ -328,9 +354,9 @@ describe('SM2Multikey', () => {
         ];
 
         // Test signature verification with test vectors
-        it('SM2Multikey signature test vectors', async () => {
+        it('SM2Multikey signature test vectors', () => {
             for (const vector of testVectors) {
-                const key = await SM2Multikey.from(vector.key);
+                const key = SM2Multikey.from(vector.key);
 
                 // Test verification with test vector signature
                 const { verify } = key.verifier();
@@ -348,8 +374,8 @@ describe('SM2Multikey', () => {
         });
 
         // Test error cases
-        it('SM2Multikey signature error cases', async () => {
-            const key = await SM2Multikey.from(testVectors[0].key);
+        it('SM2Multikey signature error cases', () => {
+            const key = SM2Multikey.from(testVectors[0].key);
 
             // Test signing with invalid message
             const { sign } = key.signer();
@@ -364,12 +390,12 @@ describe('SM2Multikey', () => {
     });
 
     describe('from and export', () => {
-        it('should correctly import exported key with raw buffers', async () => {
+        it('should correctly import exported key with raw buffers', () => {
             // Generate a key pair
             const originalKey = SM2Multikey.generate();
-            
+
             // Export with all options
-            const exported = await originalKey.export({
+            const exported = originalKey.export({
                 publicKey: true,
                 secretKey: true,
                 includeContext: true,
@@ -378,7 +404,7 @@ describe('SM2Multikey', () => {
             });
 
             // Import the exported key
-            const importedKey = await SM2Multikey.from(exported);
+            const importedKey = SM2Multikey.from(exported);
 
             // Test signing and verification
             const message = Buffer.from('test message');
@@ -391,9 +417,9 @@ describe('SM2Multikey', () => {
             assert.strictEqual(validCross, true);
         });
 
-        it('should handle Buffer data in exported key', async () => {
+        it('should handle Buffer data in exported key', () => {
             const key = SM2Multikey.generate();
-            const exported = await key.export({
+            const exported = key.export({
                 publicKey: true,
                 secretKey: true,
                 includeContext: true,
@@ -408,7 +434,7 @@ describe('SM2Multikey', () => {
             };
 
             // Import using hex strings
-            const importedFromHex = await SM2Multikey.from({
+            const importedFromHex = SM2Multikey.from({
                 ...exportedHex,
                 publicKey: Buffer.from(exportedHex.publicKey, 'hex'),
                 secretKey: Buffer.from(exportedHex.secretKey, 'hex')

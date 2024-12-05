@@ -1,6 +1,6 @@
 {
   "name": "@instun/sm2-multikey",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A JavaScript library for generating and working with SM2Multikey key pairs. Compatible with both Node.js and fibjs runtimes.",
   "type": "module",
   "main": "lib/index.js",

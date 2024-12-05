@@ -21,7 +21,7 @@ describe('SM2 Multicodec Headers', () => {
       // Multibase encoding of compressed public key (with multicodec header)
       publicKeyMultibase: 'zEPJcCQ4kKGebz5ombkjw9mgikPckWeYDLhvZBzPckNsfjBa4',
       // Multibase encoding of private key (with multicodec header)
-      secretKeyMultibase: 'z44CBRpqNAzcr3pqMGMGNTiYpw4hFpSq74Zg32mQyKh2JXiv'
+      secretKeyMultibase: 'z4G1CtDVyCTyctEtfS6WD768wvhPWeN6zyMhJURHmWQwB3K4'
     }
   };
 
