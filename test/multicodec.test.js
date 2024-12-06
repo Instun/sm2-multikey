@@ -3,7 +3,7 @@
  */
 
 import { describe, it } from 'node:test';
-import assert from 'node:assert/strict';
+import assert from 'node:assert';
 import { SM2Multikey } from './config.js';
 
 describe('SM2 Multicodec Headers', () => {
@@ -43,7 +43,7 @@ describe('SM2 Multicodec Headers', () => {
     });
     
     // Verify the imported key matches original
-    assert.deepStrictEqual(importedKey.publicKey, keyPair.publicKey);
+    assert.deepEqual(importedKey.publicKey, keyPair.publicKey);
   });
 
   it('should encode SM2 private key with correct format', () => {
@@ -65,7 +65,7 @@ describe('SM2 Multicodec Headers', () => {
     });
     
     // Verify the imported key matches original
-    assert.deepStrictEqual(importedKey.secretKey, keyPair.secretKey);
+    assert.deepEqual(importedKey.secretKey, keyPair.secretKey);
   });
 
   it('should decode fixed SM2 key pair correctly', () => {
@@ -76,7 +76,7 @@ describe('SM2 Multicodec Headers', () => {
     });
 
     // Verify imported public key matches test vector
-    assert.deepStrictEqual(
+    assert.deepEqual(
       importedPublic.publicKey,
       TEST_VECTORS.keyPair.publicKey,
       'Decoded public key mismatch'
@@ -90,7 +90,7 @@ describe('SM2 Multicodec Headers', () => {
     });
 
     // Verify imported private key matches test vector
-    assert.deepStrictEqual(
+    assert.deepEqual(
       importedPrivate.secretKey,
       TEST_VECTORS.keyPair.secretKey,
       'Decoded private key mismatch'

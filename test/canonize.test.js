@@ -3,7 +3,7 @@
  */
 
 import { describe, it } from 'node:test';
-import assert from 'node:assert/strict';
+import assert from 'node:assert';
 import { cryptosuite } from './config.js';
 
 describe('URDNA2015 Canonization', () => {

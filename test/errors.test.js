@@ -144,14 +144,14 @@ describe('Errors', () => {
   });
 
   describe('Enhanced Error Handling', () => {
-    test('Error message formatting', (t) => {
+    test('Error message formatting', () => {
       const template = 'Invalid key type: {type}';
       const params = { type: 'RSA' };
       const message = formatErrorMessage(template, params);
       assert.equal(message, 'Invalid key type: RSA');
     });
 
-    test('Create error with cause', (t) => {
+    test('Create error with cause', () => {
       const cause = new Error('Original error');
       const error = createError(
         ErrorCodes.ERR_KEY_INVALID,
@@ -163,7 +163,7 @@ describe('Errors', () => {
       assert.equal(error.cause, cause);
     });
 
-    test('Import error with details', (t) => {
+    test('Import error with details', () => {
       const error = new ImportError('Failed to import key', {
         code: ErrorCodes.ERR_IMPORT_FAILED,
         details: { format: 'PEM' }
@@ -171,7 +171,7 @@ describe('Errors', () => {
       assert.equal(error.code, ErrorCodes.ERR_IMPORT_FAILED);
     });
 
-    test('Export error with details', (t) => {
+    test('Export error with details', () => {
       const error = new ExportError('Failed to export key', {
         code: ErrorCodes.ERR_EXPORT_FAILED,
         details: { format: 'JWK' }
@@ -179,7 +179,7 @@ describe('Errors', () => {
       assert.equal(error.code, ErrorCodes.ERR_EXPORT_FAILED);
     });
 
-    test('Encoding error with encoding type', (t) => {
+    test('Encoding error with encoding type', () => {
       const error = new FormatError('Failed to encode data', {
         code: ErrorCodes.ERR_FORMAT_INVALID,
         details: { format: 'base64' }
@@ -187,7 +187,7 @@ describe('Errors', () => {
       assert.equal(error.code, ErrorCodes.ERR_FORMAT_INVALID);
     });
 
-    test('State error with state info', (t) => {
+    test('State error with state info', () => {
       const error = new OperationError('Invalid operation state', {
         code: ErrorCodes.ERR_OPERATION_INVALID,
         details: { state: 'uninitialized' }
@@ -195,7 +195,7 @@ describe('Errors', () => {
       assert.equal(error.code, ErrorCodes.ERR_OPERATION_INVALID);
     });
 
-    test('Error chain', (t) => {
+    test('Error chain', () => {
       const cause = new Error('Network error');
       const error = createError(
         ErrorCodes.ERR_IMPORT_FAILED,
@@ -206,7 +206,7 @@ describe('Errors', () => {
       assert.equal(error.cause, cause);
     });
 
-    test('Error factory creates correct error types', (t) => {
+    test('Error factory creates correct error types', () => {
       const keyError = createError(ErrorCodes.ERR_KEY_INVALID, { details: 'Invalid key type: RSA' });
       assert.ok(keyError instanceof KeyError);
 
@@ -232,7 +232,7 @@ describe('Errors', () => {
       assert.ok(exportError instanceof ExportError);
     });
 
-    test('Error messages use templates', (t) => {
+    test('Error messages use templates', () => {
       const error = createError(ErrorCodes.ERR_KEY_INVALID, { details: 'Invalid key type: RSA' });
       assert.equal(error.message, 'Invalid key: Invalid key type: RSA');
     });

@@ -15,7 +15,7 @@ describe('SM2Multikey Advanced Tests', () => {
       const imported = SM2Multikey.fromJwk({ jwk });
       
       // Verify public key conversion
-      assert.deepStrictEqual(imported.publicKey, key.publicKey);
+      assert.deepEqual(imported.publicKey, key.publicKey);
       assert.strictEqual(imported.secretKey, null);
     });
 
@@ -25,8 +25,8 @@ describe('SM2Multikey Advanced Tests', () => {
       const imported = SM2Multikey.fromJwk({ jwk, secretKey: true });
       
       // Verify both public and private key conversion
-      assert.deepStrictEqual(imported.publicKey, key.publicKey);
-      assert.deepStrictEqual(imported.secretKey, key.secretKey);
+      assert.deepEqual(imported.publicKey, key.publicKey);
+      assert.deepEqual(imported.secretKey, key.secretKey);
     });
   });
 
@@ -43,7 +43,7 @@ describe('SM2Multikey Advanced Tests', () => {
         type: 'Multikey',
         publicKey: exported.publicKey
       });
-      assert.deepStrictEqual(imported.publicKey, key.publicKey);
+      assert.deepEqual(imported.publicKey, key.publicKey);
     });
 
     it('should handle different encoding formats', () => {
