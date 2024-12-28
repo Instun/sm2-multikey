@@ -6,10 +6,8 @@ A comprehensive implementation of the SM2 cryptographic algorithm with multikey 
 
 The SM2 Multikey library provides a complete implementation of the SM2 cryptographic algorithm with support for the W3C Multikey format. It is specifically designed for:
 
-- **Verifiable Credentials**: Create and verify digital credentials using SM2 signatures
-- **Digital Signatures**: Generate and verify SM2 signatures with SM3 digest
 - **Key Management**: Handle SM2 key pairs in multiple formats
-- **Data Integrity**: Create and verify Data Integrity Proofs
+- **Digital Signatures**: Generate and verify SM2 signatures with SM3 digest
 - **Cross-Platform**: Consistent API across Node.js and browser environments
 
 The library implements a pluggable architecture that allows for platform-specific optimizations while maintaining a consistent API. In Node.js environments, it leverages native crypto implementations for optimal performance, while in browsers it uses a pure JavaScript implementation.
@@ -30,12 +28,6 @@ The library implements a pluggable architecture that allows for platform-specifi
 - Secure key import/export operations
 - Key format validation and error handling
 
-### Standards Integration
-- W3C Data Integrity Proofs compatibility
-- Verifiable Credentials support
-- Document canonicalization (URDNA2015)
-- Cross-platform compatibility
-
 ### Security
 - Memory-safe key operations
 - Protected private key handling
@@ -53,21 +45,6 @@ The library implements a pluggable architecture that allows for platform-specifi
   - Message digest calculation
   - Data integrity verification
 
-### W3C Standards
-- **Data Integrity 1.0**
-  - Proof creation and verification
-  - Document canonicalization
-  - Signature suite implementation
-- **Verifiable Credentials**
-  - Credential issuance and verification
-  - Proof format compatibility
-  - Multikey format support
-
-### Additional Standards
-- **RDF Dataset Normalization 1.0**
-  - Deterministic document canonicalization
-  - URDNA2015 algorithm implementation
-
 ## Installation
 
 ```bash
@@ -79,7 +56,7 @@ npm install @instun/sm2-multikey
 ### Basic Key Operations
 
 ```javascript
-import { SM2Multikey, cryptosuite } from '@instun/sm2-multikey';
+import { SM2Multikey } from '@instun/sm2-multikey';
 
 // Generate a new key pair
 const key = await SM2Multikey.generate({
@@ -90,16 +67,6 @@ const key = await SM2Multikey.generate({
 const signer = key.signer();
 const signature = await signer.sign({ data });
 const isValid = await key.verifier().verify({ data, signature });
-```
-
-### Data Integrity Integration
-
-```javascript
-const suite = {
-  ...cryptosuite,
-  signer: () => key.signer(),
-  verifier: () => key.verifier()
-};
 ```
 
 ### Key Export/Import
@@ -213,37 +180,6 @@ Creates a verification function for this key pair.
       - `signature` (Buffer|Uint8Array): Signature to verify
     - Returns: Promise<boolean> Verification result
 - **Throws:** `KeyError` if public key is not available
-
-### Cryptographic Suite
-
-Implementation of the SM2 2023 cryptographic suite for Data Integrity.
-
-#### Properties
-
-- `name` (string): 'sm2-2023'
-- `requiredAlgorithm` (string): 'SM2'
-
-#### Methods
-
-##### canonize(input, options)
-Canonicalizes a JSON-LD document.
-- **Parameters:**
-  - `input` (Object|string): JSON-LD document
-  - `options` (Object, optional): Canonicalization options
-    - `algorithm` (string): Canonicalization algorithm (default: 'URDNA2015')
-    - `format` (string): Output format (default: 'application/n-quads')
-- **Returns:** Promise<string> Canonicalized N-Quads string
-- **Throws:** `JsonLdError` if canonicalization fails
-
-##### createVerifier(options)
-Creates a verifier for SM2 signatures.
-- **Parameters:**
-  - `options` (Object)
-    - `verificationMethod` (Object): Verification method object
-      - Must contain valid SM2 public key data
-      - Must specify key format (JWK or Multikey)
-- **Returns:** Verifier object with verify() method
-- **Throws:** Error if verification method is invalid
 
 ### Error Types
 
