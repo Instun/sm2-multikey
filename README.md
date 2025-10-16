@@ -18,6 +18,7 @@ The library implements a pluggable architecture that allows for platform-specifi
 - SM2 key pair generation with secure defaults
 - Digital signature creation and verification
 - SM3 message digest calculation
+- ECDH key agreement for secure shared secret derivation
 - Support for compressed public keys
 
 ### Key Management
@@ -67,6 +68,10 @@ const key = await SM2Multikey.generate({
 const signer = key.signer();
 const signature = await signer.sign({ data });
 const isValid = await key.verifier().verify({ data, signature });
+
+// Derive shared secret with another key (ECDH)
+const otherKey = await SM2Multikey.generate();
+const sharedSecret = await key.deriveSecret({ publicKey: otherKey });
 ```
 
 ### Key Export/Import
@@ -180,6 +185,38 @@ Creates a verification function for this key pair.
       - `signature` (Buffer|Uint8Array): Signature to verify
     - Returns: Promise<boolean> Verification result
 - **Throws:** `KeyError` if public key is not available
+
+##### deriveSecret(options)
+Derives a shared secret using ECDH key agreement with another public key.
+- **Parameters:**
+  - `options` (Object)
+    - `publicKey` (SM2Multikey|Object): Remote public key for agreement
+    - `remotePublicKey` (SM2Multikey|Object): Alias for publicKey (backward compatibility)
+- **Returns:** Promise<Uint8Array> Derived shared secret (32 bytes)
+- **Throws:**
+  - `KeyError`: If no private key is available
+  - `ArgumentError`: If remote public key is invalid
+  - `SM2Error`: If key agreement fails
+
+**Example:**
+```javascript
+// Generate two key pairs
+const alice = SM2Multikey.generate();
+const bob = SM2Multikey.generate();
+
+// Derive shared secrets
+const aliceSecret = await alice.deriveSecret({ publicKey: bob });
+const bobSecret = await bob.deriveSecret({ publicKey: alice });
+
+// Secrets should be identical
+console.log(Buffer.from(aliceSecret).equals(Buffer.from(bobSecret))); // true
+```
+
+##### keyAgreement
+Indicates whether this key supports key agreement operations.
+- **Type:** boolean
+- **Value:** Always true for SM2 keys
+- **Usage:** Check if key supports deriveSecret functionality
 
 ### Error Types
 
